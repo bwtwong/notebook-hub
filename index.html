@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Notebooks — A Series of Living Practice Repositories</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0C0C12;
+    --ink-mid: #16161F;
+    --cream: #F7F5F1;
+    --slate-light: #8A8A9A;
+    --gold: #C9A84C;
+    --teal: #4FB8A6;
+    --copper: #C97D4F;
+    --rose: #C97D9E;
+    --slate-blue: #6B8CAE;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--ink);
+    color: var(--cream);
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(247,245,241,0.08);
+  }
+
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+  }
+
+  .hero {
+    padding: 5rem 2rem 4rem;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 700;
+    line-height: 1.08;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(247,245,241,0.6);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .notebooks {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem 2rem 6rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px;
+    background: rgba(247,245,241,0.07);
+  }
+
+  .notebook-card {
+    background: var(--ink-mid);
+    padding: 2.5rem 2rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .notebook-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .notebook-card:hover { background: #1E1E2A; }
+  .notebook-card:focus-visible { outline: 2px solid var(--cream); outline-offset: -2px; }
+  .notebook-card:hover::before { transform: scaleX(1); }
+
+  .card-1::before { background: var(--gold); }
+  .card-2::before { background: var(--teal); }
+  .card-3::before { background: var(--copper); }
+  .card-4::before { background: var(--rose); }
+  .card-5::before { background: var(--slate-blue); }
+
+  .notebook-tag {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    width: fit-content;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-1 .notebook-tag { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .card-2 .notebook-tag { background: rgba(79,184,166,0.15); color: var(--teal); }
+  .card-3 .notebook-tag { background: rgba(201,125,79,0.15); color: var(--copper); }
+  .card-4 .notebook-tag { background: rgba(201,125,158,0.15); color: var(--rose); }
+  .card-5 .notebook-tag { background: rgba(107,140,174,0.15); color: var(--slate-blue); }
+
+  .notebook-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.85rem;
+    color: var(--cream);
+  }
+
+  .notebook-desc {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: rgba(247,245,241,0.6);
+    margin-bottom: 1.75rem;
+    flex-grow: 1;
+  }
+
+  .notebook-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(247,245,241,0.08);
+  }
+
+  .notebook-stats {
+    font-size: 0.75rem;
+    color: var(--slate-light);
+    letter-spacing: 0.02em;
+  }
+
+  .notebook-arrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(247,245,241,0.4);
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .notebook-card:hover .notebook-arrow {
+    transform: translateX(4px);
+  }
+
+  .card-1:hover .notebook-arrow { color: var(--gold); }
+  .card-2:hover .notebook-arrow { color: var(--teal); }
+  .card-3:hover .notebook-arrow { color: var(--copper); }
+  .card-4:hover .notebook-arrow { color: var(--rose); }
+  .card-5:hover .notebook-arrow { color: var(--slate-blue); }
+
+  .notebook-card.coming-soon {
+    cursor: default;
+    opacity: 0.55;
+  }
+
+  .notebook-card.coming-soon::before { display: none; }
+  .notebook-card.coming-soon:hover { background: var(--ink-mid); }
+
+  .coming-soon-badge {
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    border: 1px solid rgba(247,245,241,0.15);
+    padding: 3px 10px;
+    border-radius: 2px;
+    width: fit-content;
+    margin-bottom: 1.5rem;
+  }
+
+  .principles {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+    text-align: center;
+  }
+
+  .principles-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    margin-bottom: 1.5rem;
+  }
+
+  .principles-text {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(247,245,241,0.55);
+  }
+
+  /* ═══════════════════════════════════
+     THESIS SECTION
+  ══════════════════════════════════════ */
+
+  .thesis-section {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 2rem 2rem 7rem;
+  }
+
+  .thesis-divider-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .thesis-divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(247,245,241,0.08);
+  }
+
+  .thesis-divider-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    white-space: nowrap;
+  }
+
+  .thesis-intro {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .thesis-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--slate-light);
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+  }
+
+  .thesis-intro h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .thesis-intro p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(247,245,241,0.62);
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  .thesis-intro p + p { margin-top: 1rem; }
+
+  .thesis-intro strong { color: var(--cream); font-weight: 600; }
+
+  /* The Journey Map */
+
+  .journey-map {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: rgba(247,245,241,0.07);
+    margin-bottom: 1rem;
+  }
+
+  .journey-stage {
+    background: var(--ink-mid);
+    padding: 1.5rem 1.75rem;
+    cursor: pointer;
+    transition: background 0.25s ease;
+    position: relative;
+  }
+
+  .journey-stage:hover, .journey-stage.active { background: #1C1C28; }
+  .journey-stage:focus-visible { outline: 2px solid var(--cream); outline-offset: -2px; }
+
+  .journey-stage-head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .journey-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--slate-light);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.25s ease;
+  }
+
+  .journey-stage.active .journey-num { background: var(--cream); }
+
+  .journey-titles { flex: 1; }
+
+  .journey-verb {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.15rem;
+  }
+
+  .journey-question {
+    font-size: 0.82rem;
+    color: rgba(247,245,241,0.5);
+    font-style: italic;
+  }
+
+  .journey-dots {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .journey-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .journey-arrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    color: var(--slate-light);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .journey-stage.active .journey-arrow { transform: rotate(90deg); }
+
+  .journey-detail {
+    display: none;
+    padding-top: 1.25rem;
+    margin-top: 1.25rem;
+    border-top: 1px solid rgba(247,245,241,0.08);
+  }
+
+  .journey-stage.active .journey-detail { display: block; }
+
+  .journey-pattern {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: rgba(247,245,241,0.65);
+    margin-bottom: 1.25rem;
+  }
+
+  .journey-pattern strong { color: var(--cream); }
+
+  .journey-frameworks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .journey-fw-tag {
+    font-size: 0.74rem;
+    font-weight: 500;
+    padding: 5px 11px;
+    border-radius: 3px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .journey-fw-tag .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Stage connector line down the left */
+  .journey-map { position: relative; }
+
+  .thesis-closing {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(247,245,241,0.08);
+    text-align: center;
+  }
+
+  .thesis-closing p {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: rgba(247,245,241,0.6);
+    max-width: 640px;
+    margin: 0 auto 1.1rem;
+  }
+
+  .thesis-closing strong { color: var(--cream); font-weight: 600; }
+
+  .thesis-signature {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--slate-light);
+    margin-top: 1.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .journey-stage-head { flex-wrap: wrap; }
+    .journey-dots { order: 3; width: 100%; margin-top: 0.5rem; }
+  }
+
+  footer {
+    border-top: 1px solid rgba(247,245,241,0.08);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--slate-light);
+  }
+
+  footer a { color: var(--cream); text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+  footer a:hover { opacity: 1; }
+
+  @media (max-width: 700px) {
+    .notebooks { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">A Series of Living Notebooks</span>
+</header>
+
+<div class="hero">
+  <p class="hero-eyebrow">A Personal Knowledge Hub, Shared Publicly</p>
+  <h1>Practice repositories,<br>not reference shelves</h1>
+  <p>Three living notebooks I've built while figuring out the systems I want to work in — health policy, consulting, health innovation, and impact investing — each one made to apply, not just read, with AI-coached practice scenarios throughout. Sharing them in case they're useful to someone navigating the same ground.</p>
+</div>
+
+<div class="notebooks">
+
+  <a href="https://bwtwong.github.io/health-equity-WA-notebook" class="notebook-card card-1" target="_blank">
+    <span class="notebook-tag">Health Policy</span>
+    <div class="notebook-title">Health Equity WA Notebook</div>
+    <div class="notebook-desc">A visual policy knowledge hub mapping the structures, actors, and levers shaping health equity outcomes in Western Australia — built for navigating the system, not just understanding it in the abstract.</div>
+    <div class="notebook-meta">
+      <span class="notebook-stats">Policy Mapping · WA Context</span>
+      <span class="notebook-arrow">Open ›</span>
+    </div>
+  </a>
+
+  <a href="https://bwtwong.github.io/consulting-playbook" class="notebook-card card-2" target="_blank">
+    <span class="notebook-tag">Consulting</span>
+    <div class="notebook-title">The Consulting Playbook</div>
+    <div class="notebook-desc">28 frameworks spanning problem structuring, implementation, evaluation, scale-up, monitoring & impact, and case interviews — the tools that make complex problems tractable, from entry-level to MBB practice.</div>
+    <div class="notebook-meta">
+      <span class="notebook-stats">28 Frameworks · 6 Categories</span>
+      <span class="notebook-arrow">Open ›</span>
+    </div>
+  </a>
+
+  <a href="https://bwtwong.github.io/health-innovation-playbook" class="notebook-card card-3" target="_blank">
+    <span class="notebook-tag">Health Innovation</span>
+    <div class="notebook-title">Health Commercialisation & Innovation Playbook</div>
+    <div class="notebook-desc">From bench to bedside to business model — readiness scales, TGA/PBAC/MSAC regulatory pathways, health economics, and go-to-market strategy for bringing health innovation to Australian patients.</div>
+    <div class="notebook-meta">
+      <span class="notebook-stats">13 Frameworks · AU-Focused</span>
+      <span class="notebook-arrow">Open ›</span>
+    </div>
+  </a>
+
+  <a href="https://bwtwong.github.io/impact-investing-playbook" class="notebook-card card-4" target="_blank">
+    <span class="notebook-tag">Impact Investing</span>
+    <div class="notebook-title">Impact Investing Playbook</div>
+    <div class="notebook-desc">From an analyst's first impact thesis to a fund manager's portfolio construction — measurement standards, deal structuring, blended finance, and due diligence for capital deployed with intention.</div>
+    <div class="notebook-meta">
+      <span class="notebook-stats">14 Frameworks · Analyst to Allocator</span>
+      <span class="notebook-arrow">Open ›</span>
+    </div>
+  </a>
+
+  <a href="https://bwtwong.github.io/implementation-science-cheatsheet" class="notebook-card card-5" target="_blank">
+    <span class="notebook-tag">Implementation Science</span>
+    <div class="notebook-title">Implementation Science & MEL Cheatsheet</div>
+    <div class="notebook-desc">How do we know it still works once we're not in the room? The academic public health and development frameworks for proving something survives scale, handoff, and time — a reference, not a practice notebook.</div>
+    <div class="notebook-meta">
+      <span class="notebook-stats">8 Frameworks · No AI Practice Mode</span>
+      <span class="notebook-arrow">Open ›</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="thesis-section">
+
+  <div class="thesis-divider-label">
+    <span class="thesis-divider-text">Why This Exists</span>
+    <span class="thesis-divider-line"></span>
+  </div>
+
+  <div class="thesis-intro">
+    <p class="thesis-eyebrow">A Note on How I Read These Frameworks</p>
+    <h2>This is how I see frameworks<br>translating a solution into reality</h2>
+    <p>However different the discipline — consulting, health innovation, impact investing, implementation science — every framework here is doing one of the same five jobs. It's <strong>diagnosing</strong> a problem, <strong>deciding</strong> what to do about it, <strong>funding</strong> the action, <strong>proving</strong> it worked, or <strong>scaling</strong> it so it lasts.</p>
+    <p>Different vocabulary, same five functions. That's the lens this whole series is built on — and it's also why the fourth notebook below looks and feels different from the rest. Implementation science wasn't built to persuade a client by Friday; it was built to survive a journal reviewer years later. Same map, different instrument.</p>
+  </div>
+
+  <div class="journey-map" id="journeyMap">
+
+    <div class="journey-stage" onclick="toggleStage(this)">
+      <div class="journey-stage-head">
+        <span class="journey-num">1</span>
+        <div class="journey-titles">
+          <div class="journey-verb">Diagnose</div>
+          <div class="journey-question">What's actually going on here?</div>
+        </div>
+        <div class="journey-dots">
+          <span class="journey-dot" style="background:#7DD3C0"></span>
+          <span class="journey-dot" style="background:#C9A84C"></span>
+          <span class="journey-dot" style="background:#E8A877"></span>
+        </div>
+        <span class="journey-arrow">›</span>
+      </div>
+      <div class="journey-detail">
+        <p class="journey-pattern">Before anything else, the mess gets structured into something checkable. Every discipline here refuses to act on a vibe — they all force the hypothesis onto paper before testing it.</p>
+        <div class="journey-frameworks">
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>MECE Principle</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Issue Tree</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Porter's Five Forces</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>SWOT Analysis</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Stakeholder Mapping</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>McKinsey 7S Framework</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Business Model Canvas</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>PESTLE Analysis</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Root Cause Analysis</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Gap Analysis</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>TRL / CRL Readiness</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>The Evidence Hierarchy</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Impact-Washing Red Flags</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>ESG vs Impact Investing</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Developing an Impact Thesis</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage" onclick="toggleStage(this)">
+      <div class="journey-stage-head">
+        <span class="journey-num">2</span>
+        <div class="journey-titles">
+          <div class="journey-verb">Decide</div>
+          <div class="journey-question">Given the diagnosis, what do we actually do?</div>
+        </div>
+        <div class="journey-dots">
+          <span class="journey-dot" style="background:#C9A84C"></span>
+          <span class="journey-dot" style="background:#7DD3C0"></span>
+          <span class="journey-dot" style="background:#E8A877"></span>
+        </div>
+        <span class="journey-arrow">›</span>
+      </div>
+      <div class="journey-detail">
+        <p class="journey-pattern">Almost every decision tool here is a <strong>quadrant in disguise</strong>. Nobody trusts a single number — everyone collapses competing tensions onto two axes so a room of humans can point at a box and agree.</p>
+        <div class="journey-frameworks">
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>2×2 Matrix</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Ansoff Matrix</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>BCG Growth-Share Matrix</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Hypothesis-Driven Thinking</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>The Pyramid Principle</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Cost-Benefit Analysis</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Profitability Framework</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Market Sizing</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>Stage-Gate Process</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>Health GTM Channel Strategy</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Capital Stack Selection</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage" onclick="toggleStage(this)">
+      <div class="journey-stage-head">
+        <span class="journey-num">3</span>
+        <div class="journey-titles">
+          <div class="journey-verb">Fund</div>
+          <div class="journey-question">Who pays for this, and who's accountable?</div>
+        </div>
+        <div class="journey-dots">
+          <span class="journey-dot" style="background:#7DD3C0"></span>
+          <span class="journey-dot" style="background:#E8A877"></span>
+          <span class="journey-dot" style="background:#C9A84C"></span>
+        </div>
+        <span class="journey-arrow">›</span>
+      </div>
+      <div class="journey-detail">
+        <p class="journey-pattern">This is where "good idea" meets "but who's actually going to resource it." <strong>Blended finance and the Valley of Death are the same problem</strong> — engineering who bears the risk so capital will move — wearing finance and health-tech clothing respectively. Regulatory and IP clearance live here too: they're gatekeeping steps, not technical ones.</p>
+        <div class="journey-frameworks">
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>The Valley of Death</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>TGA Regulatory Pathway</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>Reimbursement Pathway Mapping</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>IP Strategy for Health Innovation</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>Technology Transfer Process</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Blended Finance</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Social Impact Bonds</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>RACI Matrix</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>The Consulting Work Plan</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Three Horizons of Growth</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Kübler-Ross Change Curve</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Value Chain Analysis</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage" onclick="toggleStage(this)">
+      <div class="journey-stage-head">
+        <span class="journey-num">4</span>
+        <div class="journey-titles">
+          <div class="journey-verb">Prove</div>
+          <div class="journey-question">Did it work — and would it have happened anyway?</div>
+        </div>
+        <div class="journey-dots">
+          <span class="journey-dot" style="background:#E8A877"></span>
+          <span class="journey-dot" style="background:#7DD3C0"></span>
+          <span class="journey-dot" style="background:#C9A84C"></span>
+          <span class="journey-dot" style="background:#6B8CAE"></span>
+        </div>
+        <span class="journey-arrow">›</span>
+      </div>
+      <div class="journey-detail">
+        <p class="journey-pattern">The most crowded stage, because causation is the hardest move to defend. <strong>The counterfactual question</strong> shows up everywhere under a different name — additionality, deadweight, comparator, assumption, CMO configuration — and it's always asking the same plain thing.</p>
+        <div class="journey-frameworks">
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Additionality / "But For" Test</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Five Dimensions of Impact</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>IRIS+</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Impact Risk Assessment</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Impact Due Diligence Process</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Theory of Change (Investor Lens)</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>HEOR / ICER</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>HTA: PBAC & MSAC</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>SROI</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Theory of Change</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Logic Model</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Kirkpatrick Model</span>
+          <span class="journey-fw-tag" style="border-color:rgba(107,140,174,0.3); color:#9BB8D3;"><span class="dot" style="background:#6B8CAE"></span>Realist Evaluation (CMO)</span>
+          <span class="journey-fw-tag" style="border-color:rgba(107,140,174,0.3); color:#9BB8D3;"><span class="dot" style="background:#6B8CAE"></span>RE-AIM</span>
+          <span class="journey-fw-tag" style="border-color:rgba(107,140,174,0.3); color:#9BB8D3;"><span class="dot" style="background:#6B8CAE"></span>OECD-DAC Criteria</span>
+          <span class="journey-fw-tag" style="border-color:rgba(107,140,174,0.3); color:#9BB8D3;"><span class="dot" style="background:#6B8CAE"></span>Developmental Evaluation</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-stage" onclick="toggleStage(this)">
+      <div class="journey-stage-head">
+        <span class="journey-num">5</span>
+        <div class="journey-titles">
+          <div class="journey-verb">Scale</div>
+          <div class="journey-question">Having proven it, how do we make it last and grow?</div>
+        </div>
+        <div class="journey-dots">
+          <span class="journey-dot" style="background:#C9A84C"></span>
+          <span class="journey-dot" style="background:#E8A877"></span>
+          <span class="journey-dot" style="background:#7DD3C0"></span>
+          <span class="journey-dot" style="background:#6B8CAE"></span>
+        </div>
+        <span class="journey-arrow">›</span>
+      </div>
+      <div class="journey-detail">
+        <p class="journey-pattern">Scaling frameworks are obsessed with <strong>drift</strong> — the fear that something proven small will degrade once it's bigger, faster, or run by someone else. Goodhart's Law is basically the thesis statement of this entire stage. This is also where academic implementation science concentrates hardest — its whole discipline exists to answer "does it still work when we're not in the room?"</p>
+        <div class="journey-frameworks">
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Scaling Readiness Assessment</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>Balanced Scorecard</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>OKRs</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,168,76,0.3); color:#E8C87A;"><span class="dot" style="background:#C9A84C"></span>KPI Framework Design</span>
+          <span class="journey-fw-tag" style="border-color:rgba(79,184,166,0.3); color:#7DD3C0;"><span class="dot" style="background:#4FB8A6"></span>Clinical Adoption Pathway</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>Impact Portfolio Construction</span>
+          <span class="journey-fw-tag" style="border-color:rgba(201,125,79,0.3); color:#E8A877;"><span class="dot" style="background:#C97D4F"></span>OPIM</span>
+          <span class="journey-fw-tag" style="border-color:rgba(107,140,174,0.3); color:#9BB8D3;"><span class="dot" style="background:#6B8CAE"></span>CFIR</span>
+          <span class="journey-fw-tag" style="border-color:rgba(107,140,174,0.3); color:#9BB8D3;"><span class="dot" style="background:#6B8CAE"></span>i-PARIHS</span>
+          <span class="journey-fw-tag" style="border-color:rgba(107,140,174,0.3); color:#9BB8D3;"><span class="dot" style="background:#6B8CAE"></span>Normalization Process Theory</span>
+          <span class="journey-fw-tag" style="border-color:rgba(107,140,174,0.3); color:#9BB8D3;"><span class="dot" style="background:#6B8CAE"></span>Knowledge-to-Action</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="thesis-closing">
+    <p>Whatever the project, I'm drawn to the same role: <strong>translating a good idea trapped in expert language into something someone can actually act on.</strong> These five functions are how I think about doing that, at any scale.</p>
+    <div class="thesis-signature">— click a stage above to see how it shows up across notebooks</div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Maintained by <a href="https://github.com/bwtwong" target="_blank">bwtwong</a> on GitHub · Built with Claude</p>
+</footer>
+
+<script>
+function toggleStage(stage) {
+  const isActive = stage.classList.contains('active');
+  document.querySelectorAll('.journey-stage.active').forEach(s => {
+    s.classList.remove('active');
+    s.setAttribute('aria-expanded', 'false');
+  });
+  if (!isActive) {
+    stage.classList.add('active');
+    stage.setAttribute('aria-expanded', 'true');
+  }
+}
+
+// Open stage 1 by default so the interaction is visible on load,
+// and retrofit accessibility for keyboard and screen-reader users
+document.addEventListener('DOMContentLoaded', () => {
+  const firstStage = document.querySelector('.journey-stage');
+  if (firstStage) {
+    firstStage.classList.add('active');
+    firstStage.setAttribute('aria-expanded', 'true');
+  }
+  document.querySelectorAll('.journey-stage').forEach(stage => {
+    stage.setAttribute('role', 'button');
+    stage.setAttribute('tabindex', '0');
+    if (!stage.hasAttribute('aria-expanded')) stage.setAttribute('aria-expanded', 'false');
+    const verbEl = stage.querySelector('.journey-verb');
+    if (verbEl) stage.setAttribute('aria-label', `${verbEl.textContent.trim()} stage — expand to see frameworks`);
+    stage.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        stage.click();
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>
